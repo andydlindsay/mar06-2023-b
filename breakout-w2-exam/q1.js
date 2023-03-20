@@ -14,7 +14,18 @@ Examples:
 */
 
 const keyMatcher = function(firstObj, secondObj, key) {
-  
+  return firstObj[key] === secondObj[key];
+
+  const firstObjValue = firstObj[key];
+  const secondObjValue = secondObj[key];
+
+  return firstObjValue === secondObjValue;
+
+  // if (firstObjValue === secondObjValue) {
+  //   return true;
+  // }
+
+  // return false;
 };
 
 // Don't change below:
