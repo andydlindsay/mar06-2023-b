@@ -8,71 +8,87 @@
 - [x] More HTTP methods
 - [x] Method Override [Stretch]
 
-### Hashing
-* one way process (cannot be undone)
-* 'password' => hashing algo => 'faksdhf234rh0fasdkfha093fadskf'
-* salt => randomly generated string
-* salt + password => hash => store the output
-* 'dasfhajsdhfjahpassword'
+### Storing Passwords
+* We **never** want to store passwords as plain text
+* Passwords should always be _hashed_ 
+* **Hashing**:
+  * The original string is passed into a function that performs some kind of transformation on it and returns a different string (the _hash_)
+  * This is a one way process: a hashed value cannot be retrieved
+* We make hashing more secure by adding a _salt_ to the original string prior to hashing
+* This [helps to protect against Rainbow Table attacks](https://stackoverflow.com/questions/420843/how-does-password-salt-help-against-a-rainbow-table-attack)
 
-### Encryption
-* two way process
-* symmetrical key => the same key to encrypt and decrypt
-* plaintext cookies => encryption algo => encrypted string => res.cookie()
-* encrypted cookies => decryption algo => req.session
+### Encrypted Cookies
+* Plain text cookies can be manipulated by users
+* It's better practice to use _encrypted_ cookies
+* **Encryption**:
+  * Similar to hashing, the string is scrambled/transformed by a function
+  * This is a two-way process: encrypted strings can be decrypted by the intended recipient
 
+### HTTP Secure (HTTPS)
+* HTTPS uses Transport Layer Security (TLS) to encrypt communication between client and server
+* Encrypted using asymmetric cryptography which uses a public key and private key system
+* The public key is available to anyone who wants it and is used to encrypt the communication
+* The private key is known only to the receiver and is used to decrypt the communication
 
-http://localhost:3000/protected
+### When to use...
+* Plain Text Cookies:
+  * Almost never use plain cookies
+  * Maybe for:
+    * Language selection
+    * Shopping cart for non-logged in users
+    * Analytics
+* Encrypted Cookies:
+  * Do this by default
+  * Only store a way to uniquely identify the user (eg. `user_id` or `username` can be used to look up values in a database or object)
 
-Monster in the Middle (MitM)
+### REST (Representational State Transfer)
 
-https => http secure
-* asymetric encryption
-* public key/private key
-https://www.google.com/
+* REST means that the path that we are going to should represent the data being transferred
+* An API that uses the REST convention is said to be RESTful
+* RESTful routes look like:
 
+  | **Method** | **Path** | **Purpose** |
+  |:---:|:---|:---|
+  | GET | /resources | Retrieve all of a resource (Browse) |
+  | GET | /resources/:id | Retrieve a particular resource (Read) |
+  | POST | /resources/:id | Update a resource (Edit) |
+  | POST | /resources | Create a new resource (Add) |
+  | POST | /resources/:id/delete | Delete an existing resource (Delete) |
 
-### REST
-* RESTful architecture
-* naming convention for routes
-* REpresentational State Transfer
+* RESTful API's have some advantages:
+  * If I know that your API is RESTful, then I can easily guess at what endpoints you have defined and I don't need to read your documentation to figure it out
+  * Results in clean URLs (ie. `/resources` instead of `/get-my-resource`)
+  * The desired action is implied by the HTTP verb
+  * This method of specifying URLs is chainable (eg. `/users/123`, `/users/123/resources` or `/users/123/resources/456`)
 
-GET /all-the-users-in-the-sytem
-POST /create-a-new-user
-GET /the-comments-from-a-video
-
-Browse  GET   /users
-Read    GET   /pins/:id
-Edit    POST  /pins/:id
-Add     POST  /pins
-Delete  POST  /pins/:id/delete
-
-Browse  GET     /users
-Read    GET     /pins/:id
-Edit    PATCH   /pins/:id  // app.patch('/pins/:id', (req,res)=> {});
-Add     POST    /pins
-Delete  DELETE  /pins/:id
-
-GET /videos/42/comments
-GET /blogposts/5/replies
-
+* Selectors are always plural (eg. `/resources`, `/users`)
+* Actions are always singular (eg. `/login`, `/register`)
 
 ### More HTTP Methods
-* all semantic aliases for POST
-* div => article, aside, section, header, footer
+- We have more [*verbs*](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods) available to us than just `GET` and `POST`
+- Popular ones are `PUT`, `PATCH`, and `DELETE`
+- `PUT`: used to replace an existing resource
+- `PATCH`: update part of an exisiting resource
+- `DELETE`: delete an existing resource
+- We can access these other methods via AJAX requests (we'll introduce you to AJAX in week 4) or by using the [`method-override`](https://www.npmjs.com/package/method-override) package
+- Using these new verbs, our routes table now looks like:
 
-PUT => replaces a resource completely
-PATCH => replaces a piece of resource
-DELETE => deletes a resource
+  | **Method** | **Path** | **Purpose** |
+  |:---:|:---|:---|
+  | GET | /resources | Retrieve all of a resource (Browse) |
+  | GET | /resources/:id | Retrieve a particular resource (Read) |
+  | PUT | /resources/:id | Replace a resource (Edit) |
+  | PATCH | /resources/:id | Update a resource (Edit) |
+  | POST | /resources | Create a new resource (Add) |
+  | DELETE | /resources/:id | Delete an existing resource (Delete) |
 
-
-https://www.google.com/search?
-q=javascript&
-sxsrf=APwXEdc4y6V7mG4uF_HPHDesDUD32b92yw%3A1679597677552&
-source=hp&
-ei=baAcZPzgHYzK0PEP5KupiAc&iflsig=AOEireoAAAAAZByufSu37aBZlC5vahLpl2PHjR93HTDm&ved=0ahUKEwi8y7r33PL9AhUMJTQIHeRVCnEQ4dUDCAo&uact=5&oq=javascript&gs_lcp=Cgdnd3Mtd2l6EAMyBAgjECcyBAgjECcyBAgjECcyDQgAEIoFELEDEIMBEEMyBwgAEIoFEEMyBwgAEIoFEEMyBwgAEIoFEEMyCAgAEIoFEJECMgcIABCKBRBDMgcIABCKBRBDOgsIABCABBCxAxCDAToLCC4QgAQQsQMQgwE6CAguEIAEELEDOgsIABCKBRCxAxCDAToFCAAQgAQ6BwgAEIAEEAo6BwgjELECECc6DQgAEIAEELEDEIMBEAo6CggAEIAEELEDEApQAFjMEWCiEmgDcAB4AYABzQGIAbMKkgEFNi41LjGYAQCgAQE&sclient=gws-wiz
-
-req.query.source
-
-
-req.method = req.query._method
+### Useful Links
+* [Plain Text Offenders](https://github.com/plaintextoffenders/plaintextoffenders/blob/master/offenders.csv)
+* [How Does Encryption Work?](https://medium.com/searchencrypt/what-is-encryption-how-does-it-work-e8f20e340537)
+* [What is HTTPS?](https://www.cloudflare.com/learning/ssl/what-is-https/)
+* [Asymmetric Cryptography](https://searchsecurity.techtarget.com/definition/asymmetric-cryptography)
+* [Resource Naming](https://restfulapi.net/resource-naming/)
+* [Express Middleware](https://expressjs.com/en/guide/using-middleware.html)
+* [Method Override Package](https://www.npmjs.com/package/method-override)
+* [Express Response Object](http://expressjs.com/en/api.html#res)
+* [List of common Express middleware](https://expressjs.com/en/resources/middleware.html)
