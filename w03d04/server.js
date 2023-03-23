@@ -1,17 +1,19 @@
 const express = require('express');
 const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
+const bcrypt = require('bcryptjs');
 
 const users = {
   abc: {
     id: 'abc',
     email: 'a@a.com',
-    password: '1234'
+    password: '$2a$10$rP4IevOmt2JN7eFGyq/S9.JTGL3ik2StIdfyBAPfaKPKwvW5VFUz2'
   },
   def: {
     id: 'def',
     email: 'b@b.com',
-    password: '1234'
+    password: '$2a$10$rP4IevOmt2JN7eFGyq/S9.JTGL3ik2StIdfyBAPfaKPKwvW5VFUz2'
   },
 };
 
@@ -23,8 +25,13 @@ app.set('view engine', 'ejs');
 
 // middleware
 app.use(morgan('dev')); // (req, res, next) => {}
-app.use(cookieParser()); // populates req.cookies
 app.use(express.urlencoded({ extended: false })); // populates req.body
+
+// app.use(cookieParser()); // populates req.cookies
+app.use(cookieSession({
+  name: 'my-cookie-name',
+  keys: ['secret'],
+}));
 
 // GET /register
 app.get('/register', (req, res) => {
@@ -59,10 +66,14 @@ app.post('/register', (req, res) => {
 
   // happy path! create the new user object
   const uniqueId = Math.random().toString(36).substring(2, 5);
+
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(password, salt);
+
   const newUser = {
     id: uniqueId,
     email: email,
-    password: password
+    password: hash
   };
 
   // add the new user object to the `users` object
@@ -80,6 +91,9 @@ app.get('/login', (req, res) => {
 
 // POST /login
 app.post('/login', (req, res) => {
+  console.log('req.method', req.method)
+  req.method = 'DELETE'
+
   // get the email and password from the request body
   const email = req.body.email;
   const password = req.body.password;
@@ -105,13 +119,16 @@ app.post('/login', (req, res) => {
   }
 
   // do the passwords NOT match
-  if (foundUser.password !== password) {
+  const result = bcrypt.compareSync(password, foundUser.password);
+  if (!result) {
+  // if (foundUser.password !== password) {
     return res.status(400).send('passwords do not match');
   }
 
   // they are who they say they are!!
   // set a cookie and then redirect the user
-  res.cookie('userId', foundUser.id);
+  req.session.userId = foundUser.id;
+  // res.cookie('userId', foundUser.id);
 
   res.redirect('/protected');
 });
@@ -119,7 +136,7 @@ app.post('/login', (req, res) => {
 // GET /protected
 app.get('/protected', (req, res) => {
   // check if the user is logged in
-  const userId = req.cookies.userId;
+  const userId = req.session.userId;
 
   if (!userId) {
     return res.status(401).send('you must be logged in to see this page');
@@ -139,7 +156,9 @@ app.get('/protected', (req, res) => {
 // POST /logout
 app.post('/logout', (req, res) => {
   // clear the cookie
-  res.clearCookie('userId');
+  // res.clearCookie('userId');
+  req.session = null;
+  // req.session.user_id = null; // {user_id: null}
 
   // redirect the user
   res.redirect('/login');
