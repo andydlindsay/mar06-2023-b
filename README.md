@@ -4,3 +4,4 @@
 * [BREAKOUT - Mock Exam Review](/breakout-w1-exam)
 * [BREAKOUT - Week 2 Exam Review](/breakout-w2-exam)
 * [W03D03 - HTTP Cookies & User Authentication](/w03d03)
+* [W03D04 - Security & Real World HTTP Servers](/w03d04)
