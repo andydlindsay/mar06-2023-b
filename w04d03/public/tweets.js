@@ -54,6 +54,7 @@ $(document).ready(() => {
     }).then((tweets) => {
       console.log(tweets);
 
+      // remove all children from the #tweet-container (ie. put it back to its original state)
       $tweetContainer.empty();
   
       for (const tweet of tweets) {
@@ -84,6 +85,7 @@ $(document).ready(() => {
       data: urlencoded
     }).then((newTweet) => {
       console.log(newTweet);
+      
       // fetch the tweets again
       fetchTweets();
     });
