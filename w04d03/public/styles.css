@@ -1,0 +1,16 @@
+.tweet {
+  border: 2px solid lightseagreen;
+  border-radius: 15px;
+  padding: 15px;
+  color: #ff69b4;
+  margin-bottom: 10px;
+}
+
+.tweet-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tweet-content {
+  color: #4056A1;
+}
