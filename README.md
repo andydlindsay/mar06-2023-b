@@ -6,3 +6,4 @@
 * [W03D03 - HTTP Cookies & User Authentication](/w03d03)
 * [W03D04 - Security & Real World HTTP Servers](/w03d04)
 * [W04D03 - AJAX](/w04d03)
+* [W04D04 - Responsive Design and SASS](/w04d04)
