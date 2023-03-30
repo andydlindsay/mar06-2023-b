@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 24px;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -15,11 +19,16 @@ header {
 
 section {
   border: 2px solid black;
+  /* width: 400px;
+  height: 400px; */
+  font-size: 100px;
 }
 
 section div {
   height: 150px;
-  width: 150px;
+  width: 25vw;
+  /* min-width: 100px; */
+  /* max-width: 250px; */
   margin: 20px;
   line-height: 150px;
   display: inline-block;
@@ -31,3 +40,22 @@ footer {
   background-color: burlywood;
   height: 150px;
 }
+
+@media only screen and (min-width: 401px) and (max-width: 800px) {
+  section {
+    background-color: hotpink;
+  }
+}
+
+@media only screen and (min-width: 200px) and (max-width: 400px) {
+  section {
+    background-color: goldenrod;
+  }
+}
+
+@media only screen and (orientation: landscape) {
+  section {
+    background-color: royalblue;
+  } 
+}
+
