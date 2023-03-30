@@ -1,0 +1,70 @@
+// @import '_variables';
+@import 'variables';
+
+h1 {
+  font-size: 16px;
+  color: $heading-font;
+}
+
+div {
+  border: $border;
+  text-decoration: underline;
+}
+
+@media only screen {
+  $border-color: white;
+  div {
+    border-color: $border-color;
+  }
+}
+
+// div.content {}
+// div.content h2 {}
+// div.content p {}
+
+div.content {
+  font-size: 12px;
+  color: yellow;
+
+  h2 {
+    font-size: 24px;
+    color: orange;
+
+    span {
+      text-decoration: wavy;
+    }
+  }
+
+  p {
+    font-size: 2rem;
+  }
+}
+
+.header {
+  background-color: aquamarine;
+}
+
+// <footer class="header footer"/>
+.footer {
+  @extend .header;
+  color: plum;
+}
+
+@mixin create-square($num, $color) {
+  width: $num * 25px;
+  height: $num * 25px;
+  color: $color;
+}
+
+.small-square {
+  @include create-square(2, pink);
+  font-size: 24px;
+}
+
+.medium-square {
+  @include create-square(4, $border-color);
+}
+
+// .heading {
+//   @include create-square();
+// }
