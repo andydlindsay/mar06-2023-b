@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); // populates process.env with key/value pairs from .env file
 
 const express = require('express');
 const morgan = require('morgan');
