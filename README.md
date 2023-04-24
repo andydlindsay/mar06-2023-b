@@ -11,3 +11,4 @@
 * [W05D05 - Mid-term Project Kickoff](/w05d05)
 * [BREAKOUT - Express Router](/breakout-express-router)
 * [W07D05 - Custom Hooks](/w07d05)
+* [W08D01 - Bootcamp Review](/w08d01)
