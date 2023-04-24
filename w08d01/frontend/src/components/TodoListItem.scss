@@ -1,0 +1,9 @@
+$primary: orange;
+
+.todo-list-item {
+  border: 2px dotted green;
+  color: $primary;
+  border-radius: 15px;
+  padding: 0 20px;
+  margin-bottom: 10px;
+}
