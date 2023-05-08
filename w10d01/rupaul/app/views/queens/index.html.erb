@@ -1,0 +1,8 @@
+<h1>All the queens</h1>
+
+<% @queens.each do |queen| %>
+  <div class="queen">
+    <h2>Name: <%= queen.name %></h2>
+    <%= link_to 'Quotes by this queen', queen_quotes_path(queen.id) %>
+  </div>
+<% end %>
